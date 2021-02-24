@@ -1,14 +1,10 @@
-const githubIntrospection = require('./presets/github_introspection.json');
-const swapiIntrospection = require('./presets/swapi_introspection.json');
-const yelpIntrospection = require('./presets/yelp_introspection.json');
-const shopifyIntrospection = require('./presets/shopify_introspection.json');
+const queriesIntrospection = require('./presets/queries_introspection.json');
+const internalIntrospection = require('./presets/internal_introspection.json');
 
 export const PRESETS = {
-  'Star Wars': swapiIntrospection,
-  Yelp: yelpIntrospection,
-  'Shopify Storefront': shopifyIntrospection,
-  GitHub: githubIntrospection,
+  'Queries API': queriesIntrospection,
+  'Internal API': internalIntrospection,
 };
 
-export const defaultPresetName = 'Star Wars';
+export const defaultPresetName = 'Queries API';
 export const defaultPreset = PRESETS[defaultPresetName];

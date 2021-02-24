@@ -37,23 +37,23 @@
     <script src="https://cdn.jsdelivr.net/npm/graphql-voyager/dist/voyager.min.js"></script>
   </head>
   <body>
-    <div id="voyager">Loading...</div>
+    <div id="queries-api">Loading...</div>
+
+    <div id="internal-api">Loading...</div>
+
     <script>
-      // Defines a GraphQL introspection fetcher using the fetch API. You're not required to
-      // use fetch, and could instead implement introspectionProvider however you like,
-      // as long as it returns a Promise
-      // Voyager passes introspectionQuery as an argument for this function
+      
       function introspectionProvider(introspectionQuery) {
         // This example expects a GraphQL server at the path /graphql.
         // Change this to point wherever you host your GraphQL server.
-        return fetch('/graphql', {
+        return fetch('https://app.pipefy.com/queries', {
           method: 'post',
           headers: {
             Accept: 'application/json',
             'Content-Type': 'application/json',
+            'Authorization': 'Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzUxMiJ9.eyJ1c2VyIjp7ImlkIjo4NDEzMzksImVtYWlsIjoiYW1hZGV1LmZpbGhvQHBpcGVmeS5jb20iLCJhcHBsaWNhdGlvbiI6NTk5MDF9fQ.be1RDR0nn3FjGA30zk15VfZmlWrd66bg2aTXPZzunPZl9zjyHyLoMb5AwhmDEJAh-W7RygFkzvFDcRyA_6Ch2A'
           },
-          body: JSON.stringify({ query: introspectionQuery }),
-          credentials: 'include',
+          body: JSON.stringify({ query: introspectionQuery })
         })
           .then(function (response) {
             return response.text();
@@ -67,10 +67,38 @@
           });
       }
 
+      function introspectionProviderInternal(introspectionQuery) {
+          // This example expects a GraphQL server at the path /graphql.
+          // Change this to point wherever you host your GraphQL server.
+          return fetch('https://app.pipefy.com/internal_api', {
+            method: 'post',
+            headers: {
+              Accept: 'application/json',
+              'Content-Type': 'application/json',
+              'Authorization': 'Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzUxMiJ9.eyJ1c2VyIjp7ImlkIjo4NDEzMzksImVtYWlsIjoiYW1hZGV1LmZpbGhvQHBpcGVmeS5jb20iLCJhcHBsaWNhdGlvbiI6NTk5MDF9fQ.be1RDR0nn3FjGA30zk15VfZmlWrd66bg2aTXPZzunPZl9zjyHyLoMb5AwhmDEJAh-W7RygFkzvFDcRyA_6Ch2A'
+            },
+            body: JSON.stringify({ query: introspectionQuery })
+          })
+            .then(function (response) {
+              return response.text();
+            })
+            .then(function (responseBody) {
+              try {
+                return JSON.parse(responseBody);
+              } catch (error) {
+                return responseBody;
+              }
+            });
+        }
+
       // Render <Voyager /> into the body.
-      GraphQLVoyager.init(document.getElementById('voyager'), {
+      GraphQLVoyager.init(document.getElementById('queries-api'), {
         introspection: introspectionProvider,
       });
+
+      GraphQLVoyager.init(document.getElementById('internal-api'), {
+          introspection: introspectionProviderInternal,
+        });
     </script>
   </body>
 </html>
